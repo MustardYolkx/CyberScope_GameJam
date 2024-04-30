@@ -1,3 +1,4 @@
+using Cinemachine;
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,9 +6,12 @@ using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
+    public CameraShake camShake;
     //带有碰撞体的LineRenderer, 要有PolygonCollider2D、LineRenderer组件, 
     [SerializeField] GameObject colliderLinePrefab;
 
+    public Vector2 mousePos;
+    public float followSmooth;
     public Camera cam;
 
     public Transform startPoint;                     //射线发射起点
@@ -19,7 +23,7 @@ public class Shoot : MonoBehaviour
     private float timeStep = 0;                      //时间步长
 
     private LineRenderer line;
-    [SerializeField] private float lineWidth = 0.07f;
+    [SerializeField] private float lineWidth = 0.01f;
     [SerializeField] private Material lineMaterial;
     private RaycastHit hits;
 
@@ -44,7 +48,7 @@ public class Shoot : MonoBehaviour
             line.endWidth = lineWidth;
             line.material = lineMaterial;
         }
-
+        camShake = FindObjectOfType<CameraShake>();
     }
 
     // Update is called once per frame
@@ -54,29 +58,29 @@ public class Shoot : MonoBehaviour
         {
             return;
         }
-        if (Input.GetMouseButtonDown(0))
-        {
-            Calculation_parabola();
-        }
-        startPoint.transform.position =new Vector2(cam.ScreenPointToRay(Input.mousePosition).origin.x, cam.ScreenPointToRay(Input.mousePosition).origin.y);
-        //if (line_Accuracy > 3)
-        //{
-        //    CreateColliderLine(touchPosList);
-        //}
-        Debug.DrawLine(Vector3.zero, Vector3.up * 1000, Color.red );
+        //Shooting();
+        mousePos = new Vector2(cam.ScreenPointToRay(Input.mousePosition).origin.x, cam.ScreenPointToRay(Input.mousePosition).origin.y);
+
+        MouseFollow();
+        Shooting();
+
     }
 
+    public void MouseFollow()
+    {
+        if (Vector2.Distance(startPoint.transform.position, mousePos) > 0.1f)
+        {
+            startPoint.transform.position = Vector2.Lerp(startPoint.transform.position,mousePos, Time.deltaTime*followSmooth);
+        }
+    }
     public void Shooting()
     {
-        //if(Input.GetMouseButtonDown(0)) 
-        //{
-        //    RaycastHit2D hitinfo = Physics2D.Raycast(cam.ScreenPointToRay(Input.mousePosition).origin, cam.ScreenPointToRay(Input.mousePosition).direction);
-        //    Target_Info target = hitinfo.collider.gameObject.GetComponentInChildren<Target_Info>();
-        //    if(target!=null)
-        //    {
-
-        //    }
-        //}
+        if (Input.GetMouseButtonDown(0))
+        {
+            camShake.PlayerShakeAnimation();
+            //camShake.ShakeCamera();
+            Calculation_parabola();
+        }
     }
 
     private void Calculation_parabola()
