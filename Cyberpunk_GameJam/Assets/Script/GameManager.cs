@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
             //Debug.Log(currentTime);
         }
-        
+        target1.MoveUp();
         yield return new WaitForSeconds(target2.movingTime);
         currentTime = 0;
         target2.MoveDown();
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
 
             //Debug.Log(currentTime);
         }
-
+        target2.MoveUp();
         yield return new WaitForSeconds(target2.movingTime);
         currentTime = 0;
         target3.MoveDown();
@@ -90,9 +90,9 @@ public class GameManager : MonoBehaviour
             }
             yield return null;
             currentTime += Time.deltaTime;
-
             //Debug.Log(currentTime);
         }
+        target3.MoveUp();
     }
 
 }
