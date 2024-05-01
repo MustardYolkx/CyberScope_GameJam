@@ -14,6 +14,12 @@ public class Shoot : MonoBehaviour
     public float followSmooth;
     public Camera cam;
 
+    //cam zoom
+    public Camera camZoom;
+    public float zoomSpeed;
+    public float zoomMin;
+    public float zoomMax;
+
     public Transform startPoint;                     //射线发射起点
     private float initialHight = 0;                  //射线开始发射的初始高度
     public float initialVelocity = 0;                //初始速度
@@ -39,8 +45,8 @@ public class Shoot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cam = FindObjectOfType<Camera>();
-
+        //cam = FindObjectOfType<Camera>();
+        zoomMax = camZoom.orthographicSize;
         if (!this.GetComponent<LineRenderer>())
         {
             line = this.gameObject.AddComponent<LineRenderer>();
@@ -63,7 +69,7 @@ public class Shoot : MonoBehaviour
 
         MouseFollow();
         Shooting();
-
+        ScopeScroll();
     }
 
     public void MouseFollow()
@@ -81,6 +87,27 @@ public class Shoot : MonoBehaviour
             //camShake.ShakeCamera();
             Calculation_parabola();
         }
+    }
+
+    public void ScopeScroll()
+    {
+        float scrollValue = Input.GetAxis("Mouse ScrollWheel");
+        if (scrollValue != 0)
+        {         
+            camZoom.orthographicSize += scrollValue * Time.deltaTime * zoomSpeed;           
+        }
+
+            if (camZoom.orthographicSize < zoomMin)
+            {
+            camZoom.orthographicSize = zoomMin;
+            }                      
+        
+
+            if (camZoom.orthographicSize > zoomMax)
+            {
+            camZoom.orthographicSize = zoomMax;
+            }
+        
     }
 
     private void Calculation_parabola()
