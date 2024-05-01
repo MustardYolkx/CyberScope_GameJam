@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
+    private GameManager gameManager;
     public CameraShake camShake;
     //带有碰撞体的LineRenderer, 要有PolygonCollider2D、LineRenderer组件, 
     [SerializeField] GameObject colliderLinePrefab;
@@ -43,8 +44,13 @@ public class Shoot : MonoBehaviour
     private float timer = 0;                         //累计时间
     private int lineCount = 0;
     // Start is called before the first frame update
+
+    //ShootEffect
+    public GameObject windowBrokenVFX;
+    public GameObject targetBrokenVFX;
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         //cam = FindObjectOfType<Camera>();
         zoomMax = camZoom.orthographicSize;
         if (!this.GetComponent<LineRenderer>())
@@ -161,10 +167,24 @@ public class Shoot : MonoBehaviour
             bool isCollide = Physics.Raycast(collideRay, out RaycastHit hitinfo,1);
             if(isCollide)
             {
+                WindowCollider windows = hitinfo.collider.gameObject.GetComponent<WindowCollider>();
+                TargetCollider targetCol = hitinfo.collider.gameObject.GetComponent<TargetCollider>();
+                if (windows != null)
+                {
+                    Instantiate(windowBrokenVFX, hitinfo.point, Quaternion.identity);
+                }
+
+                if (targetCol != null)
+                {
+                    Debug.Log("collide");
+                   GameObject targetColVFX = Instantiate(targetBrokenVFX, hitinfo.transform);
+                    targetColVFX.transform.position = hitinfo.point;
+                }
                 Target_Info target = hitinfo.collider.gameObject.GetComponent<Target_Info>();
                 if (target != null)
                 {
-                    Debug.Log("true");
+                    Debug.Log(target.score);
+                    target.Shoot();
                     Destroy(target.gameObject);
                     break;
                 }
