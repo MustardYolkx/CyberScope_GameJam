@@ -14,21 +14,31 @@ public class GameManager : MonoBehaviour
     public float currentTime;
     public float targetChangeWaitingTime;
 
+    public float thisLevelScore;
+    public enum Level
+    {
+        Level1,
+        Level2, 
+        Level3,
 
+    }
 
+    public Level currentLevel;
     // Start is called before the first frame update
     void Start()
     {
-
         Cursor.visible = false;
-        StartCoroutine(FirstTarget());
-
+        if(currentLevel== Level.Level1)
+        {
+            StartCoroutine(FirstTarget());
+        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Cursor.visible = false;
     }
 
     IEnumerator FirstTarget()
@@ -95,4 +105,9 @@ public class GameManager : MonoBehaviour
         target3.MoveUp();
     }
 
+    IEnumerator Level2()
+    {
+
+        yield return null;
+    }
 }
