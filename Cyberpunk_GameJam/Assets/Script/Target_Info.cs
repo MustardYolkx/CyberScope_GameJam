@@ -17,7 +17,7 @@ public class Target_Info : MonoBehaviour
 
     public BodyParts bodyPart;
 
-    public float score;
+    public int score;
     private int count;
     // Start is called before the first frame update
     void Start()

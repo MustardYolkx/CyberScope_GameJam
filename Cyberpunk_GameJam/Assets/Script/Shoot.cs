@@ -8,8 +8,7 @@ public class Shoot : MonoBehaviour
 {
     private GameManager gameManager;
     public CameraShake camShake;
-    //带有碰撞体的LineRenderer, 要有PolygonCollider2D、LineRenderer组件, 
-    [SerializeField] GameObject colliderLinePrefab;
+
 
     public Vector2 mousePos;
     public float followSmooth;
@@ -47,11 +46,24 @@ public class Shoot : MonoBehaviour
 
     public float timeDuration;
     public float bulletSpeed;
-    //ShootEffect
 
-    public bool isShootTarget;
+    //Scope Shake
+    public GameObject followMouseObj;
+    public GameObject scope;
+    public AnimationCurve animCurve;
+    public GameObject shakingPos;
+    public float duration = 1.0f;
+    public float elapsedTime = 0.0f;
+    private bool isShaking;
+
+    //ShootingEffect
+
+    public GameObject spark;
+    //HitEffect
+
     public LayerMask shootVfxLayer;
     public LayerMask targetLayer;
+    public GameObject hitParticleEffect;
     public GameObject windowBrokenVFX;
     public GameObject targetBrokenVFX;
     void Start()
@@ -82,28 +94,51 @@ public class Shoot : MonoBehaviour
         MouseFollow();
         Shooting();
         ScopeScroll();
-        
+        ScopeShaking();
         //timeDuration += Time.deltaTime;
     }
+    public void ScopeShaking()
+    {
 
+        if (isShaking)
+        {
+            elapsedTime += Time.deltaTime;
+            if (elapsedTime > duration)
+            {
+                elapsedTime = duration;
+                isShaking = false;
+            }
+
+            float movementFactor = animCurve.Evaluate(elapsedTime / duration);
+            scope.transform.localPosition = Vector3.Lerp(new Vector3(0,0,0), new Vector3(shakingPos.transform.localPosition.x, shakingPos.transform.localPosition.y,0), movementFactor);
+    }
+
+}
     public void MouseFollow()
     {
         if (Vector2.Distance(startPoint.transform.position, mousePos) > 0.1f)
         {
-            startPoint.transform.position = Vector2.Lerp(startPoint.transform.position, mousePos, Time.deltaTime * followSmooth);
+            followMouseObj.transform.position = Vector2.Lerp(followMouseObj.transform.position, mousePos, Time.deltaTime * followSmooth);
         }
     }
     public void Shooting()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            isShootTarget = false;
+            elapsedTime = 0;
+            isShaking = true;
             camShake.PlayerShakeAnimation();
             //camShake.ShakeCamera();
+            StartCoroutine(ShootingEffect());
             Calculation_parabola();
         }
     }
-
+    IEnumerator ShootingEffect()
+    {
+        spark.SetActive(true);
+        yield return new WaitForSeconds(0.05f);
+        spark.SetActive(false);
+    }
     public void ScopeScroll()
     {
         float scrollValue = Input.GetAxis("Mouse ScrollWheel");
@@ -245,6 +280,7 @@ public class Shoot : MonoBehaviour
                 if (windows != null)
                 {
                     Instantiate(windowBrokenVFX, hitinfo.point, Quaternion.identity);
+                    Instantiate(hitParticleEffect, hitinfo.point, Quaternion.identity);
                     count++;
                 }
 
@@ -252,6 +288,8 @@ public class Shoot : MonoBehaviour
                 {
                     Debug.Log("collide");
                     GameObject targetColVFX = Instantiate(targetBrokenVFX, hitinfo.transform);
+                    Instantiate(hitParticleEffect, hitinfo.point, Quaternion.identity);
+                    
                     targetColVFX.transform.position = hitinfo.point;
                     count++;
                 }
@@ -266,12 +304,21 @@ public class Shoot : MonoBehaviour
                 if (target != null)
                 {
                     Debug.Log(target.score);
+
                     target.Shoot();
+                    Instantiate(hitParticleEffect, hitTargetinfo.point, Quaternion.identity);
+                    
+                    gameManager.GenerateHitInfoPanel(hitTargetinfo.point, target.score,target.bodyPart);
+                    
+                    
                     if (target.GetComponentInParent<Level2TargetMovement>() != null)
                     {
                         target.GetComponentInParent<Level2TargetMovement>().StopMovement();
-                        break;
+                        
+
+                        
                     }
+                    break;
                     //isShootTarget = true;
                     //Destroy(target.gameObject);
 
@@ -281,56 +328,5 @@ public class Shoot : MonoBehaviour
         }
         
     }
-    IEnumerator BulletFlyVFX(float time,Ray collideRay)
-    {
-        yield return new WaitForSeconds(time);
-        
-
-        bool isCollide = Physics.Raycast(collideRay, out RaycastHit hitinfo, 1, shootVfxLayer);
-        if (isCollide)
-        {
-            WindowCollider windows = hitinfo.collider.gameObject.GetComponent<WindowCollider>();
-            TargetCollider targetCol = hitinfo.collider.gameObject.GetComponent<TargetCollider>();
-            if (windows != null)
-            {
-                Instantiate(windowBrokenVFX, hitinfo.point, Quaternion.identity);
-            }
-
-            if (targetCol != null)
-            {
-                Debug.Log("collide");
-                GameObject targetColVFX = Instantiate(targetBrokenVFX, hitinfo.transform);
-                targetColVFX.transform.position = hitinfo.point;
-            }
-        }
-
-    }
-    IEnumerator BulletFlyTarget(float time, Ray collideRay)
-    {
-
-            yield return new WaitForSeconds(time);
-            bool isShoot = Physics.Raycast(collideRay, out RaycastHit hitTargetinfo, 1);
-
-            if (isShoot)
-            {
-                
-                Target_Info target = hitTargetinfo.collider.gameObject.GetComponent<Target_Info>();
-                if (target != null)
-                {
-                    Debug.Log(target.score);
-                    target.Shoot();
-                    if (target.GetComponentInParent<Level2TargetMovement>() != null)
-                    {
-
-                        target.GetComponentInParent<Level2TargetMovement>().StopMovement();
-                    }
-                    isShootTarget = true;
-                    //Destroy(target.gameObject);
-
-                }
-
-            
-        }
-        
-    }
+    
 }
