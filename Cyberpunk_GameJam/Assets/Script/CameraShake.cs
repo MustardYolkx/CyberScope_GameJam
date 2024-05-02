@@ -45,7 +45,7 @@ public class CameraShake : MonoBehaviour
     }
     public void PlayerShakeAnimation()
     {
-        Debug.Log("ShakeCamera");
+        //Debug.Log("ShakeCamera");
         impulseSource.GenerateImpulse();
     }
 

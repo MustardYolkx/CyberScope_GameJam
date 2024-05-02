@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class Level2TargetMovement : MonoBehaviour
 {
-    public float moveSpeed;
+    public float moveTime;
     public float leftPos;
     public float rightPos;
 
+    public float localScaleX;
+    public bool isAlive;
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector2(leftPos, transform.position.y);
+        transform.position = new Vector3(leftPos, transform.position.y,transform.position.z);
+        localScaleX= transform.localScale.x;
         StartCoroutine(Movement());
     }
 
@@ -21,14 +24,34 @@ public class Level2TargetMovement : MonoBehaviour
         
     }
 
+    public void StopMovement()
+    {
+        
+        isAlive= false;
+        gameObject.LeanPause();
+
+    }
     IEnumerator Movement()
     {
-        transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
-        gameObject.LeanMoveLocalX(rightPos,moveSpeed);       
-        yield return new WaitForSeconds(moveSpeed);
-        transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
-        gameObject.LeanMoveLocalX(leftPos,moveSpeed);
-        yield return new WaitForSeconds(moveSpeed);
-        StartCoroutine(Movement());
+        while (isAlive)
+        {
+            if(isAlive)
+            {
+                transform.localScale = new Vector2(-localScaleX, transform.localScale.y);
+                gameObject.LeanMoveLocalX(rightPos, moveTime);
+            }          
+            yield return new WaitForSeconds(moveTime);
+            if (isAlive)
+            {
+                transform.localScale = new Vector2(localScaleX, transform.localScale.y);
+                gameObject.LeanMoveLocalX(leftPos, moveTime);
+            }
+            yield return new WaitForSeconds(moveTime);
+            if (isAlive)
+            {
+                StartCoroutine(Movement());
+            }
+        }
+       
     }
 }
