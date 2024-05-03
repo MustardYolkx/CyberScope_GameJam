@@ -79,6 +79,7 @@ public class Shoot : MonoBehaviour
             line.material = lineMaterial;
         }
         camShake = FindObjectOfType<CameraShake>();
+        
     }
 
     // Update is called once per frame
@@ -273,6 +274,7 @@ public class Shoot : MonoBehaviour
         int count = 0;
         for(int i = 0;i < collideRay.Count; i++)
         {
+            
             bool isCollide = Physics.Raycast(collideRay[i], out RaycastHit hitinfo, 1, shootVfxLayer);
             if (isCollide&&count ==0)
             {
@@ -297,10 +299,10 @@ public class Shoot : MonoBehaviour
             }
 
             bool isShoot = Physics.Raycast(collideRay[i], out RaycastHit hitTargetinfo, 1);
-
+            //Debug.Log(isShoot);
             if (isShoot)
             {
-
+                
                 Target_Info target = hitTargetinfo.collider.gameObject.GetComponent<Target_Info>();
                 if (target != null)
                 {
