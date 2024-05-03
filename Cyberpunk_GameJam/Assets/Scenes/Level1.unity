@@ -3433,7 +3433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitSecond: 10
-  sceneNameNextLevel: Level2
+  sceneNameNextLevel: Level2Instruction
   sceneNameGameOver: Level1-GameOver
   target1: {fileID: 24455691}
   target2: {fileID: 446379255}

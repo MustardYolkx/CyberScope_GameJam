@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
-public class Dialog : MonoBehaviour
+public class Dialog_Level2Instruction : MonoBehaviour
 {
 
     public TMP_Text currentDialogueText; // 当前对话的Text组件
@@ -16,14 +17,19 @@ public class Dialog : MonoBehaviour
     private string currentText = ""; // 当前逐字显示的文本
     public bool allDialoguesComplete = false;
     public string sceneName;
+    public Image dialogueImage; // 对话期间显示的图片
+    public Sprite specificImage; // 特定对话要显示的图片
+    
+
 
     void Start()
     {
         // 添加对话内容
-        dialogueLines.Add("YOU CAN USE THE MOUSE TO AIM, LEFT-CLICK TO SHOOT, AND USE THE SCROLL WHEEL TO ADJUST THE SCOPE, JUST AS YOU HAVE ALWAYS DONE, 573");
-        dialogueLines.Add("COOLANT CHECKED, RIFLE VOLTAGE CHECKED, SYSTEMS ALL GREEN");
-        dialogueLines.Add("CODE 573 AGENT CYBORG READY FOR FACTORY TESTING");
-        dialogueLines.Add("INITIATING COUNTDOWN FOR TESTING...3...2...1 ");
+        dialogueLines.Add("FACTORY TESTING PASSED, 573. YOU ARE NOW ASSIGNED YOUR FIRST MISSION.");
+        dialogueLines.Add("ALBERT KOHEN, THE HEAD OF KOHEN GROUP.");
+        dialogueLines.Add("HE HAS AMASSED A SUBSTANTIAL FORTUNE AND INFLUENCE BY INVESTING IN WARS OVERSEAS, AND HAS GRADUALLY INFILTRATED THE POLITICAL, EDUCATIONAL, AND EVEN MEDICAL SECTORS.");
+        dialogueLines.Add("HOWEVER, HE ACTUALLY ACQUIRES A LARGE NUMBER OF NATIVE HUMAN ORGANS THROUGH WARTIME ACTIVITIES AND SELLS THEM ON THE BLACK MARKET FOR HUGE PROFITS. ");
+        dialogueLines.Add("YOUR MISSION, 573, IS TO ELIMINATE ALBERT KOHEN. BE ADVISED, IF THE MISSION FAILS, YOU WILL BE SUBJECTED TO A SELF-DESTRUCT PROTOCOL.");
 
 
         StartCoroutine(TypeLine());
@@ -62,6 +68,17 @@ public class Dialog : MonoBehaviour
         isComplete = false; // 开始逐字显示时标记为未完整显示
         string currentText = dialogueLines[currentLine];
         currentDialogueText.text = ""; // 清空文本准备显示
+
+        // 在逐字显示前设置图片显示逻辑
+        if (currentLine == 1) // 对第三句进行判断
+        {
+            dialogueImage.sprite = specificImage;
+            dialogueImage.gameObject.SetActive(true); // 显示图片
+        }
+        else
+        {
+            dialogueImage.gameObject.SetActive(false); // 在其他句子时隐藏图片
+        }
 
         foreach (char c in currentText)
         {
