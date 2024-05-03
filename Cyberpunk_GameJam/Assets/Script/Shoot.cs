@@ -111,9 +111,10 @@ public class Shoot : MonoBehaviour
 
             float movementFactor = animCurve.Evaluate(elapsedTime / duration);
             scope.transform.localPosition = Vector3.Lerp(new Vector3(0,0,0), new Vector3(shakingPos.transform.localPosition.x, shakingPos.transform.localPosition.y,0), movementFactor);
-    }
 
-}
+        }
+
+    }
     public void MouseFollow()
     {
         if (Vector2.Distance(startPoint.transform.position, mousePos) > 0.1f)
