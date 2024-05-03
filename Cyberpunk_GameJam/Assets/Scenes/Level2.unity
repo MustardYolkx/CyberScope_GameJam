@@ -1288,7 +1288,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 16192eb235160734c9592112e0998e48, type: 2}
+  sharedProfile: {fileID: 11400000, guid: ee7d29989444a8f428434b4d3a82d8c3, type: 2}
 --- !u!4 &730684588
 Transform:
   m_ObjectHideFlags: 0
@@ -3164,6 +3164,10 @@ PrefabInstance:
       propertyPath: startPoint
       value: 
       objectReference: {fileID: 592318369}
+    - target: {fileID: 1101121222092608850, guid: ae85126285d6ec34b90d75ea779f775c, type: 3}
+      propertyPath: lineMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 66449ecaf708a5d4389bca36fb806d98, type: 2}
     - target: {fileID: 1101121222092608850, guid: ae85126285d6ec34b90d75ea779f775c, type: 3}
       propertyPath: followMouseObj
       value: 
