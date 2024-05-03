@@ -13,6 +13,7 @@ public class Target_Info : MonoBehaviour
         Arm,
         Leg,
         JustTarget,
+        Block
     }
 
     public BodyParts bodyPart;
