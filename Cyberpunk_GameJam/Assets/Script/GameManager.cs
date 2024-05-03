@@ -8,6 +8,10 @@ public class GameManager : MonoBehaviour
 {
     private Canvas canvas;
     public float waitSecond;
+    public string sceneNameNextLevel;
+    public string sceneNameGameOver;
+
+
 
     public TargetMove target1;
     public TargetMove target2;
@@ -112,9 +116,13 @@ public class GameManager : MonoBehaviour
         }
         target3.MoveUp();
         yield return new WaitForSeconds(target1.movingTime);
-        if (thisLevelScore > 10)
+        if (thisLevelScore > 14)
         {
-            SceneManager.LoadScene("Level2");
+            SceneManager.LoadScene(sceneNameNextLevel);
+        }
+        if (thisLevelScore <15)
+        {
+            SceneManager.LoadScene(sceneNameGameOver);
         }
     }
 
