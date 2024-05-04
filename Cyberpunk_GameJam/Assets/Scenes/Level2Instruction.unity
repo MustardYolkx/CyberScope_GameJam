@@ -672,7 +672,7 @@ MonoBehaviour:
   currentDialogueText: {fileID: 245296163}
   dialogueLines: []
   allDialoguesComplete: 0
-  sceneName: Level2
+  sceneName: Level2New
   dialogueImage: {fileID: 631470623}
   specificImage: {fileID: 21300000, guid: c1ad1178c6a889f4bb7f237d36f3fb77, type: 3}
 --- !u!4 &1723670319

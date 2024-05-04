@@ -14,7 +14,7 @@ public class Dialog_Level2Instruction : MonoBehaviour
     private int currentLine = 0; // 跟踪当前显示的对话行
     private bool isComplete = true; // 是否显示完整对话
     private float typingSpeed = 0.05f; // 字符显示的速度
-    private string currentText = ""; // 当前逐字显示的文本
+    //private string currentText = ""; // 当前逐字显示的文本
     public bool allDialoguesComplete = false;
     public string sceneName;
     public Image dialogueImage; // 对话期间显示的图片

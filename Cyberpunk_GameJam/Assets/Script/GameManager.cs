@@ -10,7 +10,15 @@ public class GameManager : MonoBehaviour
     public float waitSecond_Level1;
     public float waitSecond_Level2;
     public float waitSecond_Level3;
+    public float waitSecond_Level4;
+
+    public string sceneName_Level1;
+    public string sceneName_Level2;
+    public string sceneName_Level3;
+    public string sceneName_Level4;
+
     public string sceneNameNextLevel;
+
     public string sceneNameGameOver;
 
 
@@ -19,8 +27,9 @@ public class GameManager : MonoBehaviour
     public TargetMove target2;
     public TargetMove target3;
 
-    public float currentTime;
-    public float targetChangeWaitingTime;
+    //Level1
+    private float currentTime;
+    public float level1_targetChangeWaitingTime;
 
     public float thisLevelScore;
     public enum Level
@@ -28,7 +37,7 @@ public class GameManager : MonoBehaviour
         Level1,
         Level2, 
         Level3,
-
+        Level4,
     }
 
     public Level currentLevel;
@@ -37,16 +46,20 @@ public class GameManager : MonoBehaviour
     public GameObject scorePanel;
     public GameObject bodyPartPanel;
 
+    //Level2
     public GameObject level2_Target;
     public GameObject ironWall;
     public float ironWallTargetPos;
     public float ironWallTime;
 
+    //Level3
     public List<GameObject> level3_Targets;
     public Level3TargetMovement target1_Level3;
     public Level3TargetMovement currentRandomTarget;
     public int level3_TargetCount;
-    // Start is called before the first frame update
+
+    //Level4
+    public GameObject level4_Target;
     void Start()
     {
         canvas = FindObjectOfType<Canvas>();
@@ -67,6 +80,10 @@ public class GameManager : MonoBehaviour
             currentRandomTarget = level3_Targets[index].GetComponentInChildren<Level3TargetMovement>();
             StartCoroutine(Level3());
         }
+        if (currentLevel == Level.Level4)
+        {
+            StartCoroutine(Level4());
+        }
     }
 
     // Update is called once per frame
@@ -85,7 +102,7 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                yield return new WaitForSeconds(targetChangeWaitingTime);
+                yield return new WaitForSeconds(level1_targetChangeWaitingTime);
                 target1.MoveUp();
                 //time = waitSecond;
                 
@@ -106,7 +123,7 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                yield return new WaitForSeconds(targetChangeWaitingTime);
+                yield return new WaitForSeconds(level1_targetChangeWaitingTime);
                 target2.MoveUp();
                 //time = waitSecond;
 
@@ -127,7 +144,7 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                yield return new WaitForSeconds(targetChangeWaitingTime);
+                yield return new WaitForSeconds(level1_targetChangeWaitingTime);
                 target3.MoveUp();
                 //time = waitSecond;
 
@@ -164,7 +181,12 @@ public class GameManager : MonoBehaviour
                     yield return new WaitForSeconds(3);
                     SceneManager.LoadScene(sceneNameGameOver);
                 }
-                yield return new WaitForSeconds(targetChangeWaitingTime);
+                else
+                {
+                    yield return new WaitForSeconds(3);
+                    SceneManager.LoadScene(sceneName_Level3);
+                }
+                yield return new WaitForSeconds(level1_targetChangeWaitingTime);
                 //time = waitSecond;
                 break;
             }
@@ -175,7 +197,7 @@ public class GameManager : MonoBehaviour
 
             //Debug.Log(currentTime);
         }
-        yield return null;
+        SceneManager.LoadScene(sceneNameGameOver);
     }
 
     public void TargetCount_Level3()
@@ -196,23 +218,52 @@ public class GameManager : MonoBehaviour
             if(!currentRandomTarget.isAlive&&!target1_Level3.isAlive)
             {
                 yield return new WaitForSeconds(1);
-                SceneManager.LoadScene(sceneNameNextLevel);
+                SceneManager.LoadScene(sceneName_Level4);
             }
             //TriggerTarget2_Level3();
-            if (level3_TargetCount==2)
-            {
-                              
-                break;
-            }
+
             yield return null; 
             currentTime += Time.deltaTime;
 
             //Debug.Log(currentTime);
         }
         yield return new WaitForSeconds(1);
-
+        SceneManager.LoadScene(sceneNameGameOver);
         //GameOver
     }
+    IEnumerator Level4()
+    {
+        currentTime = 0;
+
+        while (currentTime < waitSecond_Level4)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                if (level4_Target.GetComponentInChildren<Level4Target>().isAlive)
+                {
+                    yield return new WaitForSeconds(1);
+                    level4_Target.GetComponentInChildren<Animator>().SetTrigger("TargetDie");
+                    yield return new WaitForSeconds(3);
+                    
+                    SceneManager.LoadScene(sceneNameGameOver);
+                }
+                else
+                {
+                    yield return new WaitForSeconds(4);
+                    SceneManager.LoadScene(sceneNameNextLevel);
+                }
+            }
+                      
+            yield return null;
+            currentTime += Time.deltaTime;
+
+            //Debug.Log(currentTime);
+        }
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(sceneNameGameOver);
+        //GameOver
+    }
+
     public void GenerateHitInfoPanel(Vector3 pos,int score,Target_Info.BodyParts bodyPart)
     {
         if(bodyPart == Target_Info.BodyParts.JustTarget)

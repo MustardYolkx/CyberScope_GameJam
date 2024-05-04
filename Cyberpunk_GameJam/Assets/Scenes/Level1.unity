@@ -1018,7 +1018,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  bodyPart: 4
+  bodyPart: 6
+  currentLevel: 0
   score: 0
 --- !u!64 &279248854
 MeshCollider:
@@ -3359,7 +3360,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  bodyPart: 4
+  bodyPart: 6
+  currentLevel: 0
   score: 5
 --- !u!64 &839786947
 MeshCollider:
@@ -3432,18 +3434,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f2bbf1f46f44b4ca8a2ac25a8f973c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitSecond: 10
+  waitSecond_Level1: 5
+  waitSecond_Level2: 0
+  waitSecond_Level3: 0
+  waitSecond_Level4: 0
+  sceneName_Level1: 
+  sceneName_Level2: 
+  sceneName_Level3: 
+  sceneName_Level4: 
   sceneNameNextLevel: Level2Instruction
   sceneNameGameOver: Level1-GameOver
   target1: {fileID: 24455691}
   target2: {fileID: 446379255}
   target3: {fileID: 285149921}
-  currentTime: 0
-  targetChangeWaitingTime: 0.7
+  level1_targetChangeWaitingTime: 0
   thisLevelScore: 0
   currentLevel: 0
   scorePanel: {fileID: 7652968925123237269, guid: ab73e0b0a4a85cf4885cdaae135475b2, type: 3}
   bodyPartPanel: {fileID: 0}
+  level2_Target: {fileID: 0}
+  ironWall: {fileID: 0}
+  ironWallTargetPos: 0
+  ironWallTime: 0
+  level3_Targets: []
+  target1_Level3: {fileID: 0}
+  currentRandomTarget: {fileID: 0}
+  level3_TargetCount: 0
+  level4_Target: {fileID: 0}
 --- !u!1 &1021353141
 GameObject:
   m_ObjectHideFlags: 0
@@ -3490,7 +3507,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  bodyPart: 4
+  bodyPart: 6
+  currentLevel: 0
   score: 5
 --- !u!64 &1021353144
 MeshCollider:
@@ -4723,7 +4741,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  bodyPart: 4
+  bodyPart: 6
+  currentLevel: 0
   score: 5
 --- !u!64 &1576190740
 MeshCollider:
@@ -4793,7 +4812,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  bodyPart: 4
+  bodyPart: 6
+  currentLevel: 0
   score: 10
 --- !u!64 &1600664923
 MeshCollider:
@@ -4867,7 +4887,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  bodyPart: 4
+  bodyPart: 6
+  currentLevel: 0
   score: 0
 --- !u!64 &1610554125
 MeshCollider:
@@ -5641,7 +5662,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  bodyPart: 4
+  bodyPart: 6
+  currentLevel: 0
   score: 10
 --- !u!64 &1883403559
 MeshCollider:
@@ -5711,7 +5733,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  bodyPart: 4
+  bodyPart: 6
+  currentLevel: 0
   score: 10
 --- !u!64 &1979680738
 MeshCollider:
@@ -6755,7 +6778,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  bodyPart: 4
+  bodyPart: 6
+  currentLevel: 0
   score: 0
 --- !u!64 &2141430435
 MeshCollider:

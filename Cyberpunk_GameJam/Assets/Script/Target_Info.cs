@@ -12,14 +12,29 @@ public class Target_Info : MonoBehaviour
         Body,
         Arm,
         Leg,
+        MetalArm,
+        Gun,
         JustTarget,
-        Block
+        Block,
     }
 
     public BodyParts bodyPart;
 
+    public enum Level
+    {
+        Level1,
+        Level2,
+        Level3,
+        Level4,
+    }
+
+    public Level currentLevel;
+
+
     public int score;
     private int count;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +59,10 @@ public class Target_Info : MonoBehaviour
             if(animator!=null)
             {
                 animator.SetTrigger("ShootHead");
+                if (currentLevel == Level.Level4)
+                {
+                    gameObject.GetComponentInParent<Level4Target>().isAlive = false;
+                }
             }
         }
             
@@ -52,6 +71,10 @@ public class Target_Info : MonoBehaviour
             if (animator != null)
             {
                 animator.SetTrigger("ShootBody");
+                if (currentLevel == Level.Level4)
+                {
+                    gameObject.GetComponentInParent<Level4Target>().isAlive = false;
+                }
             }
         }
         else if (bodyPart == BodyParts.Leg)
@@ -69,6 +92,31 @@ public class Target_Info : MonoBehaviour
                 count++;
             }
             
+        }
+        else if (bodyPart == BodyParts.MetalArm)
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger("ShootMetalArm");
+            }
+        }
+        else if (bodyPart == BodyParts.Gun)
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger("ShootGun");
+            }
+        }
+        else if (bodyPart == BodyParts.Arm)
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger("ShootArm");
+                if(currentLevel == Level.Level4)
+                {
+                    gameObject.GetComponentInParent<Level4Target>().isAlive = false;
+                }
+            }
         }
     }
 
