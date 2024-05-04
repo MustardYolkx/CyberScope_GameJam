@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     private Canvas canvas;
     public float waitSecond_Level1;
     public float waitSecond_Level2;
+    public float waitSecond_Level3;
     public string sceneNameNextLevel;
     public string sceneNameGameOver;
 
@@ -36,7 +37,9 @@ public class GameManager : MonoBehaviour
     public GameObject scorePanel;
     public GameObject bodyPartPanel;
 
-    public List<Level3Target> level3_Targets;
+    public List<GameObject> level3_Targets;
+    public Level3TargetMovement target1_Level3;
+    public Level3TargetMovement currentRandomTarget;
     public int level3_TargetCount;
     // Start is called before the first frame update
     void Start()
@@ -50,7 +53,8 @@ public class GameManager : MonoBehaviour
         if(currentLevel == Level.Level3)
         {
             int index = Random.Range(0,level3_Targets.Count);
-            level3_Targets[index].isTarget= true;
+            level3_Targets[index].GetComponentInChildren<Level3Target>().isTarget= true;
+            currentRandomTarget = level3_Targets[index].GetComponentInChildren<Level3TargetMovement>();
             StartCoroutine(Level3());
         }
     }
@@ -145,13 +149,23 @@ public class GameManager : MonoBehaviour
     {
         level3_TargetCount++;
     }
+    public void TriggerTarget2_Level3()
+    {
+        currentRandomTarget.currentState = Level3TargetMovement.State.Run;
+    }
     IEnumerator Level3()
     {
         yield return new WaitForSeconds(1);
         currentTime = 0;
         
-        while (currentTime < waitSecond_Level2)
+        while (currentTime < waitSecond_Level3)
         {
+            if(!currentRandomTarget.isAlive&&!target1_Level3.isAlive)
+            {
+                yield return new WaitForSeconds(1);
+                SceneManager.LoadScene(sceneNameNextLevel);
+            }
+            //TriggerTarget2_Level3();
             if (level3_TargetCount==2)
             {
                               
