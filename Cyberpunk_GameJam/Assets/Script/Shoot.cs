@@ -276,8 +276,10 @@ public class Shoot : MonoBehaviour
         {
             
             bool isCollide = Physics.Raycast(collideRay[i], out RaycastHit hitinfo, 1, shootVfxLayer);
+            Debug.Log(isCollide);
             if (isCollide&&count ==0)
             {
+                
                 WindowCollider windows = hitinfo.collider.gameObject.GetComponent<WindowCollider>();
                 TargetCollider targetCol = hitinfo.collider.gameObject.GetComponent<TargetCollider>();
                 if (windows != null)
@@ -297,12 +299,12 @@ public class Shoot : MonoBehaviour
                     count++;
                 }
             }
-
+            
             bool isShoot = Physics.Raycast(collideRay[i], out RaycastHit hitTargetinfo, 1);
             //Debug.Log(isShoot);
             if (isShoot)
             {
-                
+                Debug.Log("test1");
                 Target_Info target = hitTargetinfo.collider.gameObject.GetComponent<Target_Info>();
                 if (target != null)
                 {
@@ -327,9 +329,7 @@ public class Shoot : MonoBehaviour
                     Instantiate(hitParticleEffect, hitTargetinfo.point, Quaternion.identity);
                     
                     gameManager.GenerateHitInfoPanel(hitTargetinfo.point, target.score,target.bodyPart);
-                    
-                    
-                    
+
                     break;
                     //isShootTarget = true;
                     //Destroy(target.gameObject);

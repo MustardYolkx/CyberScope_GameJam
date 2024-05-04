@@ -37,6 +37,11 @@ public class GameManager : MonoBehaviour
     public GameObject scorePanel;
     public GameObject bodyPartPanel;
 
+    public GameObject level2_Target;
+    public GameObject ironWall;
+    public float ironWallTargetPos;
+    public float ironWallTime;
+
     public List<GameObject> level3_Targets;
     public Level3TargetMovement target1_Level3;
     public Level3TargetMovement currentRandomTarget;
@@ -50,7 +55,11 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(FirstTarget());
         }
-        if(currentLevel == Level.Level3)
+        if (currentLevel == Level.Level2)
+        {
+            StartCoroutine(Level2());
+        }
+        if (currentLevel == Level.Level3)
         {
             int index = Random.Range(0,level3_Targets.Count);
             level3_Targets[index].GetComponentInChildren<Level3Target>().isTarget= true;
@@ -142,7 +151,30 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Level2()
     {
+        currentTime = 0;
 
+        while (currentTime < waitSecond_Level2)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if(level2_Target.GetComponentInChildren<Level2TargetMovement>().isAlive)
+                {
+                    yield return new WaitForSeconds(1);
+                    ironWall.LeanMoveLocalY(ironWallTargetPos, ironWallTime);
+                    yield return new WaitForSeconds(3);
+                    SceneManager.LoadScene(sceneNameGameOver);
+                }
+                yield return new WaitForSeconds(targetChangeWaitingTime);
+                //time = waitSecond;
+                break;
+            }
+            //TriggerTarget2_Level3();
+            
+            yield return null;
+            currentTime += Time.deltaTime;
+
+            //Debug.Log(currentTime);
+        }
         yield return null;
     }
 

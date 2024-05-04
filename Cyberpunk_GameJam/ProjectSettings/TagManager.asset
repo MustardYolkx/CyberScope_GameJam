@@ -14,7 +14,7 @@ TagManager:
   - Scope
   - Collider
   - Target
-  - 
+  - IronWall
   - 
   - 
   - 
@@ -43,4 +43,13 @@ TagManager:
     locked: 0
   - name: Scope
     uniqueID: 330347515
+    locked: 0
+  - name: Shadow
+    uniqueID: 2998898101
+    locked: 0
+  - name: IronWall
+    uniqueID: 1543868311
+    locked: 0
+  - name: BlackMask
+    uniqueID: 768612339
     locked: 0

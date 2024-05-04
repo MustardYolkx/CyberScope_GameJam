@@ -1,37 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Level2TargetMovement : MonoBehaviour
 {
+    public Animator anim;
     public float moveSpeed;
     public GameObject leftPos;
     public GameObject rightPos;
+
     public GameObject movableObj;
     public float localScaleX;
     public float time;
+
+    public float stayTime;
+
     public bool isAlive;
 
-    public bool turnRight = false;
+    public string sceneNameNextLevel;
+    public string sceneNameGameOver;
+    public enum State
+    {
+        Idle,
+        TurnRight,
+        TurnLeft,
+        Run,
+    }
+    public State currentState;
     // Start is called before the first frame update
     void Start()
     {
-        movableObj. transform.position = leftPos.transform.position;
+        anim = GetComponentInChildren<Animator>();
+        movableObj.transform.position = leftPos.transform.position;
         localScaleX = movableObj.transform.localScale.x;
-        //StartCoroutine(Movement());
     }
 
     // Update is called once per frame
     void Update()
     {
         Movement();
-        
     }
-
     public void StopMovement()
     {
-        
-        isAlive= false;
+
+        isAlive = false;
         //gameObject.LeanPause();
 
     }
@@ -40,51 +53,54 @@ public class Level2TargetMovement : MonoBehaviour
     {
         if (isAlive)
         {
-            if (Vector2.Distance(movableObj.transform.position, leftPos.transform.position) < 0.1f)
-            {               
-                movableObj.transform.localScale= new Vector2(-localScaleX, movableObj.transform.localScale.y);
-                turnRight = true;
-            }
-            else if(Vector2.Distance(movableObj.transform.position, rightPos.transform.position) < 0.1f)
-            {                
-                movableObj.transform.localScale = new Vector2(localScaleX, movableObj.transform.localScale.y);
-                turnRight = false;
-            }
-            
-            if (turnRight)
+            if (currentState != State.Run)
             {
-                movableObj.transform.position = Vector2.MoveTowards(movableObj.transform.position, rightPos.transform.position, Time.deltaTime * moveSpeed);
+                if (Vector2.Distance(movableObj.transform.position, leftPos.transform.position) < 0.1f)
+                {
+                    currentState = State.Idle;
+                    if (time > stayTime)
+                    {
+                        currentState = State.TurnRight;
+                        movableObj.transform.localScale = new Vector2(localScaleX, movableObj.transform.localScale.y);
+                    }
+                    time += Time.deltaTime;
+                }
+                else if (Vector2.Distance(movableObj.transform.position, rightPos.transform.position) < 0.1f)
+                {
+                    currentState = State.Idle;
+                    if (time > stayTime)
+                    {
+                        currentState = State.TurnLeft;
+                        movableObj.transform.localScale = new Vector2(-localScaleX, movableObj.transform.localScale.y);
+                    }
+                    time += Time.deltaTime;
+
+                }
+                else
+                {
+                    time = 0;
+                }
+                if (currentState == State.TurnRight)
+                {
+                    anim.SetBool("isWalk", true);
+                    movableObj.transform.position = Vector2.MoveTowards(movableObj.transform.position, rightPos.transform.position, Time.deltaTime * moveSpeed);
+                }
+                else if (currentState == State.TurnLeft)
+                {
+                    anim.SetBool("isWalk", true);
+                    movableObj.transform.position = Vector2.MoveTowards(movableObj.transform.position, leftPos.transform.position, Time.deltaTime * moveSpeed);
+
+                }
+                else if (currentState == State.Idle)
+                {
+                    anim.SetBool("isWalk", false);
+                }
             }
-            else
-            {
-                movableObj.transform.position = Vector2.MoveTowards(movableObj.transform.position, leftPos.transform.position, Time.deltaTime * moveSpeed);
-             
-            }
+           
         }
-        
-        
+
+
+
     }
-    //IEnumerator Movement()
-    //{
-    //    while (isAlive)
-    //    {
-    //        if(isAlive)
-    //        {
-    //            transform.localScale = new Vector2(-localScaleX, transform.localScale.y);
-    //            gameObject.LeanMoveLocalX(rightPos, moveTime);
-    //        }          
-    //        yield return new WaitForSeconds(moveTime);
-    //        if (isAlive)
-    //        {
-    //            transform.localScale = new Vector2(localScaleX, transform.localScale.y);
-    //            gameObject.LeanMoveLocalX(leftPos, moveTime);
-    //        }
-    //        yield return new WaitForSeconds(moveTime);
-    //        if (isAlive)
-    //        {
-    //            StartCoroutine(Movement());
-    //        }
-    //    }
-       
-    //}
+   
 }
