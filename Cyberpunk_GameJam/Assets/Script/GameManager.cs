@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         {
             int index = Random.Range(0,level3_Targets.Count);
             level3_Targets[index].GetComponentInChildren<Level3Target>().isTarget= true;
-            level3_Targets[index].GetComponentInChildren<Level3TargetMovement>().isTarget = true;
+            level3_Targets[index].GetComponentInChildren<Level3TargetMovement>().isTarget2 = true;
             currentRandomTarget = level3_Targets[index].GetComponentInChildren<Level3TargetMovement>();
             StartCoroutine(Level3());
         }

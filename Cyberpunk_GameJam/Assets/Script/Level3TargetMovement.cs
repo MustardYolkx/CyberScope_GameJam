@@ -19,7 +19,8 @@ public class Level3TargetMovement : MonoBehaviour
     public bool isAlive;
 
     public bool turnRight = false;
-    public bool isTarget;
+    public bool isTarget1;
+    public bool isTarget2;
 
     public string sceneNameNextLevel;
     public string sceneNameGameOver;
@@ -106,13 +107,13 @@ public class Level3TargetMovement : MonoBehaviour
                 movableObj.transform.position = Vector2.MoveTowards(movableObj.transform.position, targetPos.transform.position, Time.deltaTime * moveSpeed * 2);
                 if(Vector2.Distance(movableObj.transform.position, targetPos.transform.position) < 0.1f)
                 {
-                    SceneManager.LoadScene(sceneNameNextLevel);
+                    SceneManager.LoadScene(sceneNameGameOver);
                 }
             }
         }
         else
         {
-            if(!isTarget)
+            if(!isTarget2&&!isTarget1)
             {
                 SceneManager.LoadScene(sceneNameGameOver);
             }
