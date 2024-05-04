@@ -306,21 +306,30 @@ public class Shoot : MonoBehaviour
                 Target_Info target = hitTargetinfo.collider.gameObject.GetComponent<Target_Info>();
                 if (target != null)
                 {
-                    Debug.Log(target.score);
-
+                    
+                    if (target.GetComponentInParent<Level2TargetMovement>() != null)
+                    {
+                        target.GetComponentInParent<Level2TargetMovement>().StopMovement();
+                    }
+                    if (target.GetComponentInParent<Level3TargetMovement>() != null)
+                    {
+                        target.GetComponentInParent<Level3TargetMovement>().StopMovement();
+                    }
+                    if(target.GetComponentInParent<Level3Target>() != null)
+                    {
+                        if (target.GetComponentInParent<Level3Target>().isTarget1)
+                        {
+                            target.GetComponentInParent<Level3Target>().TriggerTarget2();
+                        }
+                    }
                     target.Shoot();
+
                     Instantiate(hitParticleEffect, hitTargetinfo.point, Quaternion.identity);
                     
                     gameManager.GenerateHitInfoPanel(hitTargetinfo.point, target.score,target.bodyPart);
                     
                     
-                    if (target.GetComponentInParent<Level2TargetMovement>() != null)
-                    {
-                        target.GetComponentInParent<Level2TargetMovement>().StopMovement();
-                        
-
-                        
-                    }
+                    
                     break;
                     //isShootTarget = true;
                     //Destroy(target.gameObject);
