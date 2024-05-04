@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private Canvas canvas;
-    public float waitSecond;
+    public float waitSecond_Level1;
+    public float waitSecond_Level2;
     public string sceneNameNextLevel;
     public string sceneNameGameOver;
 
@@ -34,6 +35,9 @@ public class GameManager : MonoBehaviour
     //Generate hit info panel
     public GameObject scorePanel;
     public GameObject bodyPartPanel;
+
+    public List<Level3Target> level3_Targets;
+    public int level3_TargetCount;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +47,12 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(FirstTarget());
         }
-        
+        if(currentLevel == Level.Level3)
+        {
+            int index = Random.Range(0,level3_Targets.Count);
+            level3_Targets[index].isTarget= true;
+            StartCoroutine(Level3());
+        }
     }
 
     // Update is called once per frame
@@ -58,7 +67,7 @@ public class GameManager : MonoBehaviour
         currentTime = 0;
         target1.MoveDown();
         yield return new WaitForSeconds(target1.movingTime);
-        while (currentTime < waitSecond)
+        while (currentTime < waitSecond_Level1)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -79,7 +88,7 @@ public class GameManager : MonoBehaviour
         target2.MoveDown();
         yield return new WaitForSeconds(target1.movingTime);
 
-        while (currentTime < waitSecond)
+        while (currentTime < waitSecond_Level1)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -100,7 +109,7 @@ public class GameManager : MonoBehaviour
         target3.MoveDown();
         yield return new WaitForSeconds(target1.movingTime);
 
-        while (currentTime < waitSecond)
+        while (currentTime < waitSecond_Level1)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -132,6 +141,31 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
 
+    public void TargetCount_Level3()
+    {
+        level3_TargetCount++;
+    }
+    IEnumerator Level3()
+    {
+        yield return new WaitForSeconds(1);
+        currentTime = 0;
+        
+        while (currentTime < waitSecond_Level2)
+        {
+            if (level3_TargetCount==2)
+            {
+                              
+                break;
+            }
+            yield return null; 
+            currentTime += Time.deltaTime;
+
+            //Debug.Log(currentTime);
+        }
+        yield return new WaitForSeconds(1);
+
+        //GameOver
+    }
     public void GenerateHitInfoPanel(Vector3 pos,int score,Target_Info.BodyParts bodyPart)
     {
         if(bodyPart == Target_Info.BodyParts.JustTarget)
