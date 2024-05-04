@@ -24,6 +24,7 @@ public class Dialog_Level2Instruction : MonoBehaviour
 
     void Start()
     {
+        dialogueImage.gameObject.SetActive(false);
         // 添加对话内容
         dialogueLines.Add("FACTORY TESTING PASSED, 573. YOU ARE NOW ASSIGNED YOUR FIRST MISSION.");
         dialogueLines.Add("ALBERT KOHEN, THE HEAD OF KOHEN GROUP.");
@@ -75,10 +76,7 @@ public class Dialog_Level2Instruction : MonoBehaviour
             dialogueImage.sprite = specificImage;
             dialogueImage.gameObject.SetActive(true); // 显示图片
         }
-        else
-        {
-            dialogueImage.gameObject.SetActive(false); // 在其他句子时隐藏图片
-        }
+        
 
         foreach (char c in currentText)
         {
