@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1939933526611290915
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5818311108886999051}
+  - component: {fileID: 1101121222092608850}
+  m_Layer: 0
+  m_Name: ShootManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5818311108886999051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939933526611290915}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.0652, y: 2.2256296, z: -0.10223692}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1101121222092608850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939933526611290915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf5269d20f5a9442b9dc9b7a18155ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camShake: {fileID: 0}
+  mousePos: {x: 0, y: 0}
+  followSmooth: 7
+  cam: {fileID: 0}
+  camZoom: {fileID: 0}
+  zoomSpeed: 100
+  zoomMin: 0.5
+  zoomMax: 0
+  startPoint: {fileID: 0}
+  initialVelocity: 100
+  lineWidth: 0.07
+  lineMaterial: {fileID: 2100000, guid: 796244de39718d34084bfa079ecc1b64, type: 2}
+  line_Accuracy: 750
+  timeDuration: 0
+  bulletSpeed: 0.05
+  followMouseObj: {fileID: 0}
+  scope: {fileID: 0}
+  animCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.0030517578
+      inSlope: 12.524195
+      outSlope: 12.524195
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.012221008
+    - serializedVersion: 3
+      time: 0.20678896
+      value: 0.8315267
+      inSlope: -0.50877386
+      outSlope: -0.50877386
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.18692233
+      outWeight: 0.100993685
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.61092615
+      outSlope: -0.61092615
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2955799
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  shakingPos: {fileID: 0}
+  duration: 0.5
+  elapsedTime: 0
+  isShaking: 0
+  shootVfxLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  windowBrokenVFX: {fileID: 385687034725060506, guid: a8532027da9056648b2970197d0cc391, type: 3}
+  targetBrokenVFX: {fileID: 0}

@@ -8,8 +8,7 @@ public class Shoot : MonoBehaviour
 {
     private GameManager gameManager;
     public CameraShake camShake;
-    //带有碰撞体的LineRenderer, 要有PolygonCollider2D、LineRenderer组件, 
-    [SerializeField] GameObject colliderLinePrefab;
+
 
     public Vector2 mousePos;
     public float followSmooth;
@@ -45,7 +44,26 @@ public class Shoot : MonoBehaviour
     private int lineCount = 0;
     // Start is called before the first frame update
 
-    //ShootEffect
+    public float timeDuration;
+    public float bulletSpeed;
+
+    //Scope Shake
+    public GameObject followMouseObj;
+    public GameObject scope;
+    public AnimationCurve animCurve;
+    public GameObject shakingPos;
+    public float duration = 1.0f;
+    public float elapsedTime = 0.0f;
+    private bool isShaking;
+
+    //ShootingEffect
+
+    public GameObject spark;
+    //HitEffect
+
+    public LayerMask shootVfxLayer;
+    public LayerMask targetLayer;
+    public GameObject hitParticleEffect;
     public GameObject windowBrokenVFX;
     public GameObject targetBrokenVFX;
     void Start()
@@ -61,6 +79,7 @@ public class Shoot : MonoBehaviour
             line.material = lineMaterial;
         }
         camShake = FindObjectOfType<CameraShake>();
+        
     }
 
     // Update is called once per frame
@@ -72,52 +91,81 @@ public class Shoot : MonoBehaviour
         }
         //Shooting();
         mousePos = new Vector2(cam.ScreenPointToRay(Input.mousePosition).origin.x, cam.ScreenPointToRay(Input.mousePosition).origin.y);
-
+        
         MouseFollow();
         Shooting();
         ScopeScroll();
+        ScopeShaking();
+        //timeDuration += Time.deltaTime;
     }
+    public void ScopeShaking()
+    {
 
+        if (isShaking)
+        {
+            elapsedTime += Time.deltaTime;
+            if (elapsedTime > duration)
+            {
+                elapsedTime = duration;
+                isShaking = false;
+            }
+
+            float movementFactor = animCurve.Evaluate(elapsedTime / duration);
+            scope.transform.localPosition = Vector3.Lerp(new Vector3(0,0,0), new Vector3(shakingPos.transform.localPosition.x, shakingPos.transform.localPosition.y,0), movementFactor);
+
+        }
+
+    }
     public void MouseFollow()
     {
         if (Vector2.Distance(startPoint.transform.position, mousePos) > 0.1f)
         {
-            startPoint.transform.position = Vector2.Lerp(startPoint.transform.position,mousePos, Time.deltaTime*followSmooth);
+            followMouseObj.transform.position = Vector2.Lerp(followMouseObj.transform.position, mousePos, Time.deltaTime * followSmooth);
         }
     }
     public void Shooting()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            elapsedTime = 0;
+            isShaking = true;
             camShake.PlayerShakeAnimation();
             //camShake.ShakeCamera();
+            StartCoroutine(ShootingEffect());
             Calculation_parabola();
         }
     }
-
+    IEnumerator ShootingEffect()
+    {
+        spark.SetActive(true);
+        yield return new WaitForSeconds(0.05f);
+        spark.SetActive(false);
+    }
     public void ScopeScroll()
     {
         float scrollValue = Input.GetAxis("Mouse ScrollWheel");
         if (scrollValue != 0)
-        {         
-            camZoom.orthographicSize += scrollValue * Time.deltaTime * zoomSpeed;           
+        {
+            camZoom.orthographicSize += scrollValue * Time.deltaTime * zoomSpeed;
         }
 
-            if (camZoom.orthographicSize < zoomMin)
-            {
+        if (camZoom.orthographicSize < zoomMin)
+        {
             camZoom.orthographicSize = zoomMin;
-            }                      
-        
+        }
 
-            if (camZoom.orthographicSize > zoomMax)
-            {
+
+        if (camZoom.orthographicSize > zoomMax)
+        {
             camZoom.orthographicSize = zoomMax;
-            }
-        
+        }
+
     }
 
     private void Calculation_parabola()
     {
+        List<Ray> ray_List = new List<Ray>(); 
+        ray_List.Clear();
         velocity_Horizontal = initialVelocity * Mathf.Cos(includeAngle);
         velocity_Vertical = initialVelocity * Mathf.Sin(includeAngle);
         initialHight = Mathf.Abs(startPoint.transform.position.y);
@@ -133,7 +181,7 @@ public class Shoot : MonoBehaviour
             checkPointPos = new Vector3[line_Accuracy];
         }
         for (int i = 0; i < line_Accuracy; i++)
-        {
+        {                     
             if (i == 0)
             {
                 lastCheckPos = startPoint.position - startPoint.forward;
@@ -158,103 +206,130 @@ public class Shoot : MonoBehaviour
 
                 //}
             }
-            
+
             Ray collideRay = new Ray(lastCheckPos, checkPointPosition * 1);
-            
-            Debug.DrawRay(lastCheckPos, checkPointPosition*1, Color.blue, 1f);
+            ray_List.Add(collideRay);
+            Debug.DrawRay(lastCheckPos, checkPointPosition * 1, Color.blue, 1f);
+
+            //if(!isShootTarget)
+            //{
+            //    StartCoroutine(BulletFlyTarget(timeDuration, collideRay));
+            //}
+            //StartCoroutine(BulletFlyVFX(timeDuration, collideRay));
             //Debug.DrawLine(lastCheckPos, currentCheckPos,Color.red,1f);
+
+            //bool isShoot = Physics.Raycast(collideRay, out RaycastHit hitTargetinfo, 1);
+
+            //bool isCollide = Physics.Raycast(collideRay, out RaycastHit hitinfo, 1, shootVfxLayer);
+            //if (isCollide)
+            //{
+            //    WindowCollider windows = hitinfo.collider.gameObject.GetComponent<WindowCollider>();
+            //    TargetCollider targetCol = hitinfo.collider.gameObject.GetComponent<TargetCollider>();
+            //    if (windows != null)
+            //    {
+            //        Instantiate(windowBrokenVFX, hitinfo.point, Quaternion.identity);
+            //    }
+
+            //    if (targetCol != null)
+            //    {
+            //        Debug.Log("collide");
+            //        GameObject targetColVFX = Instantiate(targetBrokenVFX, hitinfo.transform);
+            //        targetColVFX.transform.position = hitinfo.point;
+            //    }
+            //}
+
+            //if (isShoot)
+            //{
+
+            //    Target_Info target = hitTargetinfo.collider.gameObject.GetComponent<Target_Info>();
+            //    if (target != null)
+            //    {
+            //        Debug.Log(target.score);
+            //        target.Shoot();
+            //        if (target.GetComponentInParent<Level2TargetMovement>() != null)
+            //        {
+                        
+            //            target.GetComponentInParent<Level2TargetMovement>().StopMovement();
+            //        }
+            //        //Destroy(target.gameObject);
+            //        break;
+            //    }
+
+            //}
+
+                checkPointPos[i] = currentCheckPos;
+                lastCheckPos = currentCheckPos;
+                timer += timeStep;
+                   
+        }
+        StartCoroutine(DetectDelay(ray_List));
+        line.positionCount = lineCount;
+        line.SetPositions(checkPointPos);
+        timer = 0;
+    }
+
+        
+    IEnumerator DetectDelay(List<Ray> collideRay)
+    {
+        int count = 0;
+        for(int i = 0;i < collideRay.Count; i++)
+        {
             
-            bool isCollide = Physics.Raycast(collideRay, out RaycastHit hitinfo,1);
-            if(isCollide)
+            bool isCollide = Physics.Raycast(collideRay[i], out RaycastHit hitinfo, 1, shootVfxLayer);
+            if (isCollide&&count ==0)
             {
                 WindowCollider windows = hitinfo.collider.gameObject.GetComponent<WindowCollider>();
                 TargetCollider targetCol = hitinfo.collider.gameObject.GetComponent<TargetCollider>();
                 if (windows != null)
                 {
                     Instantiate(windowBrokenVFX, hitinfo.point, Quaternion.identity);
+                    Instantiate(hitParticleEffect, hitinfo.point, Quaternion.identity);
+                    count++;
                 }
 
                 if (targetCol != null)
                 {
                     Debug.Log("collide");
-                   GameObject targetColVFX = Instantiate(targetBrokenVFX, hitinfo.transform);
+                    GameObject targetColVFX = Instantiate(targetBrokenVFX, hitinfo.transform);
+                    Instantiate(hitParticleEffect, hitinfo.point, Quaternion.identity);
+                    
                     targetColVFX.transform.position = hitinfo.point;
+                    count++;
                 }
-                Target_Info target = hitinfo.collider.gameObject.GetComponent<Target_Info>();
+            }
+
+            bool isShoot = Physics.Raycast(collideRay[i], out RaycastHit hitTargetinfo, 1);
+            //Debug.Log(isShoot);
+            if (isShoot)
+            {
+                
+                Target_Info target = hitTargetinfo.collider.gameObject.GetComponent<Target_Info>();
                 if (target != null)
                 {
                     Debug.Log(target.score);
+
                     target.Shoot();
-                    Destroy(target.gameObject);
+                    Instantiate(hitParticleEffect, hitTargetinfo.point, Quaternion.identity);
+                    
+                    gameManager.GenerateHitInfoPanel(hitTargetinfo.point, target.score,target.bodyPart);
+                    
+                    
+                    if (target.GetComponentInParent<Level2TargetMovement>() != null)
+                    {
+                        target.GetComponentInParent<Level2TargetMovement>().StopMovement();
+                        
+
+                        
+                    }
                     break;
+                    //isShootTarget = true;
+                    //Destroy(target.gameObject);
+
                 }
-                
             }
-
-            checkPointPos[i] = currentCheckPos;
-            lastCheckPos = currentCheckPos;
-            timer += timeStep;
+            yield return new WaitForSeconds(timeDuration);
         }
-        line.positionCount = lineCount;
-        line.SetPositions(checkPointPos);
-        timer = 0;
+        
     }
-
-    ////生成碰撞line
-    //void CreateColliderLine(List<Vector3> pointList)
-    //{
-    //    GameObject prefab = Instantiate(colliderLinePrefab, transform);
-    //    LineRenderer lineRenderer = prefab.GetComponent<LineRenderer>();
-    //    PolygonCollider2D polygonCollider = prefab.GetComponent<PolygonCollider2D>();
-
-    //    lineRenderer.positionCount = pointList.Count;
-    //    lineRenderer.SetPositions(pointList.ToArray());
-
-    //    List<Vector2> colliderPath = GetColliderPath(pointList);
-    //    polygonCollider.SetPath(0, colliderPath.ToArray());
-    //}
-
-    ////计算碰撞体轮廓
-    //float colliderWidth;
-    //List<Vector2> pointList2 = new List<Vector2>();
-    //List<Vector2> GetColliderPath(List<Vector3> pointList3)
-    //{
-    //    //碰撞体宽度
-    //    colliderWidth = lineWidth;
-    //    //Vector3转Vector2
-    //    pointList2.Clear();
-    //    for (int i = 0; i < pointList3.Count; i++)
-    //    {
-    //        pointList2.Add(pointList3[i]);
-    //    }
-    //    //碰撞体轮廓点位
-    //    List<Vector2> edgePointList = new List<Vector2>();
-    //    //以LineRenderer的点位为中心, 沿法线方向与法线反方向各偏移一定距离, 形成一个闭合且不交叉的折线
-    //    for (int j = 1; j < pointList2.Count; j++)
-    //    {
-    //        //当前点指向前一点的向量
-    //        Vector2 distanceVector = pointList2[j - 1] - pointList2[j];
-    //        //法线向量
-    //        Vector3 crossVector = Vector3.Cross(distanceVector, Vector3.forward);
-    //        //标准化, 单位向量
-    //        Vector2 offectVector = crossVector.normalized;
-    //        //沿法线方向与法线反方向各偏移一定距离
-    //        Vector2 up = pointList2[j - 1] + 0.5f * colliderWidth * offectVector;
-    //        Vector2 down = pointList2[j - 1] - 0.5f * colliderWidth * offectVector;
-    //        //分别加到List的首位和末尾, 保证List中的点位可以围成一个闭合且不交叉的折线
-    //        edgePointList.Insert(0, down);
-    //        edgePointList.Add(up);
-    //        //加入最后一点
-    //        if (j == pointList2.Count - 1)
-    //        {
-    //            up = pointList2[j] + 0.5f * colliderWidth * offectVector;
-    //            down = pointList2[j] - 0.5f * colliderWidth * offectVector;
-    //            edgePointList.Insert(0, down);
-    //            edgePointList.Add(up);
-    //        }
-    //    }
-    //    //返回点位
-    //    return edgePointList;
-
-    //}
+    
 }
