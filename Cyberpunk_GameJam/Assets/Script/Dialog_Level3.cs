@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
-public class Dialog_Level1 : MonoBehaviour
+
+public class Dialog_Level3 : MonoBehaviour
 {
 
     public TMP_Text currentDialogueText; // 当前对话的Text组件
@@ -16,15 +18,21 @@ public class Dialog_Level1 : MonoBehaviour
     //private string currentText = ""; // 当前逐字显示的文本
     public bool allDialoguesComplete = false;
     public string sceneName;
+    public Image dialogueImage; // 对话期间显示的图片
+    public Sprite specificImage; // 特定对话要显示的图片
+
+
 
     void Start()
     {
+        dialogueImage.gameObject.SetActive(false);
         // 添加对话内容
-        dialogueLines.Add("Security protocol confirmed, Code 573 remote sniper special warfare Cyborg Agent system activated.");
-        dialogueLines.Add("573, YOU CAN USE THE MOUSE TO AIM, LEFT-CLICK TO SHOOT, AND USE THE SCROLL WHEEL TO ADJUST THE SCOPE, JUST AS YOU HAVE ALWAYS DONE, 573");
-        dialogueLines.Add("COOLANT CHECKED, RIFLE VOLTAGE CHECKED, SYSTEMS ALL GREEN");
-        dialogueLines.Add("CODE 573 AGENT CYBORG READY FOR FACTORY TESTING");
-        dialogueLines.Add("INITIATING COUNTDOWN FOR TESTING...3...2...1 ");
+        dialogueLines.Add("GOOD WORK, 573. YOU WILL UNDERGO MINOR ADJUSTMENTS BEFORE PROCEEDING TO YOUR NEXT MISSION.");
+        dialogueLines.Add("ON MAY 4TH, TWO YEARS AGO, A CYBER-TERRORIST ATTACK RESULTED IN THE CRASH OF THE NEAR-EARTH SATELLITE \"EXCALIBUR.\" THIS ACT OF TERRORISM CAUSED THE DEATHS OF NEARLY 7,000 PEOPLE IN NEW PARIS, AND THE MASTERMIND BEHIND IT REMAINS UNIDENTIFIED.");
+        dialogueLines.Add("RECENTLY, WE DETECTED ENCRYPTED COMMUNICATIONS MATCHING THE WAVEFORM USED IN THAT ATTACK, REVEALING THAT TERRORISTS ARE USING THIS SECURE METHOD TO TRADE HUMAN BRAINS AND CONSCIOUSNESS ONLINE.");
+        dialogueLines.Add("AFTER RAIDING THEIR BASE, TWO UNIDENTIFIED HACKERS MANAGED TO ESCAPE.");
+        dialogueLines.Add("OUR INVESTIGATION HAS DETERMINED THAT AT LEAST ONE CRIMINAL IS HIDING AT THIS LOCATION. ");
+        dialogueLines.Add("573, YOU ARE TASKED TO ELIMINATE THIS CRIMINAL AND ANY NEARBY ACCOMPLICES BEFORE THEY CAN DISAPPEAR.");
 
 
         StartCoroutine(TypeLine());
@@ -63,6 +71,14 @@ public class Dialog_Level1 : MonoBehaviour
         isComplete = false; // 开始逐字显示时标记为未完整显示
         string currentText = dialogueLines[currentLine];
         currentDialogueText.text = ""; // 清空文本准备显示
+
+        // 在逐字显示前设置图片显示逻辑
+        if (currentLine == 4) // 对第三句进行判断
+        {
+            dialogueImage.sprite = specificImage;
+            dialogueImage.gameObject.SetActive(true); // 显示图片
+        }
+        
 
         foreach (char c in currentText)
         {

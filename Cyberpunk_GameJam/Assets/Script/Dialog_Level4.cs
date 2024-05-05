@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
-public class Dialog_Level1 : MonoBehaviour
+
+public class Dialog_Level4 : MonoBehaviour
 {
 
     public TMP_Text currentDialogueText; // 当前对话的Text组件
@@ -17,14 +19,17 @@ public class Dialog_Level1 : MonoBehaviour
     public bool allDialoguesComplete = false;
     public string sceneName;
 
+
+
     void Start()
     {
         // 添加对话内容
-        dialogueLines.Add("Security protocol confirmed, Code 573 remote sniper special warfare Cyborg Agent system activated.");
-        dialogueLines.Add("573, YOU CAN USE THE MOUSE TO AIM, LEFT-CLICK TO SHOOT, AND USE THE SCROLL WHEEL TO ADJUST THE SCOPE, JUST AS YOU HAVE ALWAYS DONE, 573");
-        dialogueLines.Add("COOLANT CHECKED, RIFLE VOLTAGE CHECKED, SYSTEMS ALL GREEN");
-        dialogueLines.Add("CODE 573 AGENT CYBORG READY FOR FACTORY TESTING");
-        dialogueLines.Add("INITIATING COUNTDOWN FOR TESTING...3...2...1 ");
+        dialogueLines.Add("THERE'S NO TIME FOR CONGRATULATIONS, 573. AN URGENT MISSION AWAITS.");
+        dialogueLines.Add("DURING A FIREFIGHT WITH TERRORISTS, ONE OF THE TERRORISTS STAYED BEHIND TO COVER THE RETREAT OF HIS COMRADES. HE HAS TAKEN ONE OF OUR HUMAN OFFICERS HOSTAGE TO BUY TIME.");
+        dialogueLines.Add("573, YOU ARE TASKED WITH DISARMING THE TERRORIST WHILE ENSURING THE SAFETY OF THE HOSTAGE.");
+        dialogueLines.Add("SINCE THE TERRORIST'S BRAIN MAY CONTAIN ADDITIONAL INTELLIGENCE ABOUT THEIR BASE, DO NOT KILL THE TERRORIST!");
+        dialogueLines.Add("HIS ACTIVE BRAIN WILL SERVE AS OUR BEST SOURCE OF INTELLIGENCE. ");
+        dialogueLines.Add("PLEASE BE ADVISED, PRIORITIZE THE SAFETY OF THE HUMAN OFFICER BEING HELD HOSTAGE. HUMAN LIFE IS ALWAYS MORE IMPORTANT THAN OURS.");
 
 
         StartCoroutine(TypeLine());
@@ -63,6 +68,7 @@ public class Dialog_Level1 : MonoBehaviour
         isComplete = false; // 开始逐字显示时标记为未完整显示
         string currentText = dialogueLines[currentLine];
         currentDialogueText.text = ""; // 清空文本准备显示
+        
 
         foreach (char c in currentText)
         {

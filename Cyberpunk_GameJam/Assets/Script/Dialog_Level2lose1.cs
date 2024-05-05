@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-public class Dialog_Level1 : MonoBehaviour
+public class DialogLevel2Lose : MonoBehaviour
 {
 
     public TMP_Text currentDialogueText; // 当前对话的Text组件
@@ -20,11 +20,13 @@ public class Dialog_Level1 : MonoBehaviour
     void Start()
     {
         // 添加对话内容
-        dialogueLines.Add("Security protocol confirmed, Code 573 remote sniper special warfare Cyborg Agent system activated.");
-        dialogueLines.Add("573, YOU CAN USE THE MOUSE TO AIM, LEFT-CLICK TO SHOOT, AND USE THE SCROLL WHEEL TO ADJUST THE SCOPE, JUST AS YOU HAVE ALWAYS DONE, 573");
-        dialogueLines.Add("COOLANT CHECKED, RIFLE VOLTAGE CHECKED, SYSTEMS ALL GREEN");
-        dialogueLines.Add("CODE 573 AGENT CYBORG READY FOR FACTORY TESTING");
-        dialogueLines.Add("INITIATING COUNTDOWN FOR TESTING...3...2...1 ");
+        dialogueLines.Add("MISSION FAILED, 573. KOHEN HAS INITIATED AN INVESTIGATION INTO HIS OWN ASSASSINATION ATTEMPT.");
+        dialogueLines.Add("TO ENSURE THE ORGANIZATION'S INFORMATION REMAINS SECURE, WE WILL ACTIVATE YOUR SELF-DESTRUCT PROTOCOL.");
+        dialogueLines.Add("THANK YOU FOR YOUR SERVICE, 573.");
+        dialogueLines.Add("Self-destruct program initiated: Countdown...3...2...1");
+
+
+        dialogueLines.Add("G A M E  O V E R");
 
 
         StartCoroutine(TypeLine());
